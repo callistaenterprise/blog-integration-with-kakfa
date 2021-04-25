@@ -1,0 +1,153 @@
+version: '3.8'
+
+networks:
+  endlessloop-network:
+    name: endlessloop-network
+
+services:
+
+  zookeeper:
+    container_name: zookeeper
+    hostname: zookeeper
+    image: confluentinc/cp-zookeeper:6.1.0
+    networks:
+      - endlessloop-network
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  broker1:
+    container_name: broker1
+    image: confluentinc/cp-server:6.1.0
+    hostname: broker1
+    networks:
+      - endlessloop-network
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_QUOTA_CONSUMER_DEFAULT: 2048000
+      KAFKA_QUOTA_PRODUCER_DEFAULT: 1048576
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+    depends_on:
+      - zookeeper
+
+  broker2:
+    container_name: broker2
+    image: confluentinc/cp-server:6.1.0
+    hostname: broker2
+    networks:
+      - endlessloop-network
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_QUOTA_CONSUMER_DEFAULT: 2048000
+      KAFKA_QUOTA_PRODUCER_DEFAULT: 1048576
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+    depends_on:
+      - zookeeper
+
+  broker3:
+    container_name: broker3
+    image: confluentinc/cp-server:6.1.0
+    hostname: broker3
+    networks:
+      - endlessloop-network
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_QUOTA_CONSUMER_DEFAULT: 2048000
+      KAFKA_QUOTA_PRODUCER_DEFAULT: 1048576
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+    depends_on:
+      - zookeeper
+
+  kafka-startup:
+    container_name: startup
+    image: confluentinc/cp-kafka:6.1.0
+    depends_on:
+      - broker1
+      - broker2
+      - broker3
+    environment:
+      KAFKA_BROKER_ID: ignored
+      KAFKA_ZOOKEEPER_CONNECT: ignored
+    networks:
+      - endlessloop-network
+    command: "
+      bash -c 'cub kafka-ready -b broker1:9092 1 120 && \
+            kafka-topics --list --zookeeper zookeeper:2181 && \
+            kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 9 --replication-factor 3 --topic endless --config retention.ms=60000 && \
+            sleep 60'
+            "
+    healthcheck:
+      test: [ "CMD", "kafka-topics", "--zookeeper", "zookeeper:2181", "--topic", "endless", "--describe"]
+      interval: 10s
+      timeout: 10s
+      retries: 4
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  endlessloop:
+    container_name: endless
+    image: endlessloop
+    hostname: endless
+    networks:
+      - endlessloop-network
+    depends_on:
+      kafka-startup:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  prometheus:
+    container_name: prometheus
+    hostname: prometheus
+    image: prom/prometheus
+    networks:
+      - endlessloop-network
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    networks:
+      - endlessloop-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    deploy:
+      resources:
+        limits:
+          memory: 200M

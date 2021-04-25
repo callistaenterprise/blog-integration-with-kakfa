@@ -1,0 +1,49 @@
+micronaut:
+  application:
+    name: endlessloop
+  metrics:
+    enabled: true
+    sensitive: false
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: false
+
+endpoints:
+  prometheus:
+    endabled: true
+    sensitive: false
+  metrics:
+    enabled: false
+
+kafka:
+  bootstrap:
+    servers:
+      - broker1:9092
+      - broker2:9092
+      - broker3:9092
+  topic:
+    name: endless
+    partitions: 9
+    consumer_group: endlessloop_group
+  producers:
+    default:
+      acks: "1"
+      buffer:
+        memory: 2097152
+      delivery:
+        timeout:
+          ms: 30000
+      request:
+        timeout:
+          ms: 8000
+      retries: 0
+      max:
+        block:
+          ms: 5000
+        in:
+          flight:
+            requests:
+              per:
+                connection: 1
