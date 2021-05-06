@@ -31,7 +31,7 @@ kafka:
     default:
       acks: "1"
       buffer:
-        memory: 2097152
+        memory: 10485760
       delivery:
         timeout:
           ms: 30000
@@ -47,3 +47,9 @@ kafka:
             requests:
               per:
                 connection: 1
+  consumers:
+    default:
+      max:
+        poll:
+          interval:
+            ms: 3000

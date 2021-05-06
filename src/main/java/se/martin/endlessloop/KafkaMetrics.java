@@ -5,11 +5,11 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.scheduling.annotation.Scheduled;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.OffsetSpec;
-import org.apache.kafka.clients.admin.TopicDescription;
+import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.common.Node;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.config.ConfigResource;
+import org.apache.kafka.common.config.TopicConfig;
 
 import javax.inject.Singleton;
 import java.util.*;
@@ -26,6 +26,7 @@ public class KafkaMetrics {
     public static final String REPLICA_METRIC = "kafka.admin.partition.replicas";
     public static final String OFFSET_METRIC = "kafka.admin.consumer_group.offset";
     public static final String LATEST_METRIC = "kafka.admin.latest.offset";
+    public static final String RETENTION_MS = "kafka.admin.retention.ms";
 
     private final AdminClient admin;
 
@@ -37,6 +38,8 @@ public class KafkaMetrics {
     private final Map<Integer, AtomicLong> latestPartitionOffsets = new HashMap<>();
 
     private final Map<TopicPartition, OffsetSpec> latestOffsets = new HashMap<>();
+
+    private final AtomicLong retentionMs;
 
     public KafkaMetrics(ApplicationContext applicationContext) {
 
@@ -54,6 +57,8 @@ public class KafkaMetrics {
             latestPartitionOffsets.put(i, meterRegistry.gauge(LATEST_METRIC, tags, new AtomicLong(-1l)));
             latestOffsets.put(new TopicPartition(config.topic, i), OffsetSpec.latest());
         }
+
+        retentionMs = meterRegistry.gauge(RETENTION_MS, new AtomicLong(-1l));
     }
 
     @Scheduled(initialDelay = "20s", fixedDelay = "1s")
@@ -71,6 +76,35 @@ public class KafkaMetrics {
                 partitionLeaders.get(id).set(leader);
                 partitionReplicas.get(id).set(replicas);
             }
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            // do nothing
+        }
+    }
+
+    @Scheduled(initialDelay = "20s", fixedDelay = "1m")
+    public void topicConfigMetrics() {
+        var configResource = new ConfigResource(ConfigResource.Type.TOPIC, config.topic);
+        var result = admin.describeConfigs(Arrays.asList(configResource));
+        try {
+            var descriptions = result.all().get(30l, TimeUnit.SECONDS);
+            retentionMs.set(
+                    Optional.ofNullable(descriptions.get(configResource))
+                            .map(Config::entries)
+                            .orElse(Collections.emptyList())
+                            .stream()
+                            .filter(ce -> TopicConfig.RETENTION_MS_CONFIG.equals(ce.name()))
+                            .findFirst()
+                            .map(ConfigEntry::value)
+                            .map(s -> {
+                                        try {
+                                            return Long.valueOf(s);
+                                        } catch (NumberFormatException e) {
+                                            System.err.println(e);
+                                            return -1l;
+                                        }
+                                    }
+                            ).orElse(-1l)
+            );
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
             // do nothing
         }

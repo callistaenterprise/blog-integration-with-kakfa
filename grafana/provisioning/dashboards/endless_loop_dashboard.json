@@ -249,107 +249,13 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 9
-      },
-      "hiddenSeries": false,
-      "id": 32,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.1",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "(rate(kafka_producer_send_timer_seconds_sum[1m]) * 1000) / rate(kafka_producer_send_timer_seconds_count[1m])",
-          "interval": "1m",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "Average Production Time (ms)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:121",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:122",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 9
       },
       "id": 16,
       "panels": [],
@@ -372,7 +278,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 10
       },
       "hiddenSeries": false,
       "id": 18,
@@ -468,7 +374,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 10
       },
       "hiddenSeries": false,
       "id": 20,
@@ -562,13 +468,13 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 24,
+        "h": 8,
+        "w": 12,
         "x": 0,
-        "y": 26
+        "y": 18
       },
       "hiddenSeries": false,
-      "id": 22,
+      "id": 40,
       "legend": {
         "avg": false,
         "current": false,
@@ -596,8 +502,8 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(kafka_admin_latest_offset) - sum(kafka_admin_consumer_group_offset)",
-          "interval": "1m",
+          "expr": "kafka_admin_retention_ms",
+          "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
@@ -606,7 +512,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Consumer Group Lag",
+      "title": "Topic Retention (ms)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -622,7 +528,7 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:481",
+          "$$hashKey": "object:100",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -631,7 +537,7 @@
           "show": true
         },
         {
-          "$$hashKey": "object:482",
+          "$$hashKey": "object:101",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -652,7 +558,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 26
       },
       "id": 2,
       "panels": [],
@@ -675,7 +581,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 33
+        "y": 27
       },
       "hiddenSeries": false,
       "id": 30,
@@ -779,7 +685,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 33
+        "y": 27
       },
       "hiddenSeries": false,
       "id": 8,
@@ -873,9 +779,105 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "hiddenSeries": false,
+      "id": 32,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(rate(kafka_producer_send_timer_seconds_sum[1m]) * 1000) / rate(kafka_producer_send_timer_seconds_count[1m])",
+          "interval": "1m",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Average Production Time (ms)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:121",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:122",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 43
       },
       "hiddenSeries": false,
       "id": 6,
@@ -971,7 +973,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 41
+        "y": 43
       },
       "hiddenSeries": false,
       "id": 14,
@@ -1067,7 +1069,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 49
+        "y": 51
       },
       "hiddenSeries": false,
       "id": 4,
@@ -1163,7 +1165,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 49
+        "y": 51
       },
       "hiddenSeries": false,
       "id": 10,
@@ -1242,6 +1244,402 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "id": 34,
+      "panels": [],
+      "title": "Consumer Metrics",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 60
+      },
+      "hiddenSeries": false,
+      "id": 22,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kafka_admin_latest_offset) - sum(kafka_admin_consumer_group_offset)",
+          "interval": "1m",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Consumer Group Lag",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:481",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:482",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 60
+      },
+      "hiddenSeries": false,
+      "id": 38,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kafka_consumer_assigned_partitions_partitions)  ",
+          "interval": "1m",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Assigned Partitions",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:298",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:299",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 68
+      },
+      "hiddenSeries": false,
+      "id": 36,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(kafka_admin_consumer_group_offset[1m])",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Rate Of Consumption",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:241",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:242",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 68
+      },
+      "hiddenSeries": false,
+      "id": 42,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "kafka_admin_consumer_group_offset",
+          "interval": "1m",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Consumer Group Offset",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:105",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:106",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": "30s",
@@ -1252,7 +1650,7 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
